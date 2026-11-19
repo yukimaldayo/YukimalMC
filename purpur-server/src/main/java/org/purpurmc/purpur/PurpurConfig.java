@@ -230,7 +230,7 @@ public class PurpurConfig {
         deathMessageOnlyBroadcastToAffectedPlayer = getBoolean("settings.broadcasts.death.only-broadcast-to-affected-player", deathMessageOnlyBroadcastToAffectedPlayer);
     }
 
-    public static String serverModName = io.papermc.paper.ServerBuildInfo.buildInfo().brandName();
+    public static String serverModName = "YukimalMC";
     private static void serverModName() {
         serverModName = getString("settings.server-mod-name", serverModName);
     }
