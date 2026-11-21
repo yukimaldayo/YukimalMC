@@ -35,6 +35,7 @@ public class YukimalConfig {
         packRequired = getBoolean("resource-pack.required", false);
         selfHostPort = getInt("resource-pack.self-host.port", 8765);
         selfHostAddress = getString("resource-pack.self-host.public-address", "");
+        config.addDefault("resource-pack.packs", new java.util.ArrayList<String>());
 
         if (!PACK_DIR.exists() && !PACK_DIR.mkdirs()) {
             Bukkit.getLogger().log(Level.WARNING, "Could not create the Resourcepack folder");
