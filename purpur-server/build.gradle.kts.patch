@@ -92,9 +92,9 @@
 -            "Specification-Vendor" to "Paper Team",
 -            "Brand-Id" to "papermc:paper",
 -            "Brand-Name" to "Paper",
-+            "Specification-Vendor" to "Purpur Team", // Purpur
++            "Specification-Vendor" to "Yukimal", // Purpur
 +            "Brand-Id" to "purpurmc:purpur", // Purpur
-+            "Brand-Name" to "Purpur", // Purpur
++            "Brand-Name" to "YukimalMC", // Purpur
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
