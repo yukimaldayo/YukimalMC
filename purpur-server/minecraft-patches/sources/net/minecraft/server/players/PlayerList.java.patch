@@ -1,5 +1,13 @@
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
+@@ -239,6 +_,7 @@
+ 
+         org.bukkit.event.player.PlayerJoinEvent playerJoinEvent = new org.bukkit.event.player.PlayerJoinEvent(bukkitPlayer, io.papermc.paper.adventure.PaperAdventure.asAdventure(mutableComponent)); // Paper - Adventure
+         this.cserver.getPluginManager().callEvent(playerJoinEvent);
++        org.purpurmc.purpur.YukimalResourcePacks.onJoin(player); // YukimalMC - send resource packs
+ 
+         if (!player.connection.isAcceptingMessages()) {
+             return;
 @@ -311,6 +_,7 @@
              scoreboard.addPlayerToTeam(player.getScoreboardName(), collideRuleTeam);
          }
