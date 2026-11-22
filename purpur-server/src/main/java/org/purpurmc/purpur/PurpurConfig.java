@@ -75,6 +75,7 @@ public class PurpurConfig {
         commands.put("purpur", new PurpurCommand("purpur"));
         commands.put("yukimal", new org.purpurmc.purpur.command.YukimalCommand("yukimal"));
         YukimalConfig.init();
+        YukimalApiImpl.register();
 
         version = getInt("config-version", 47);
         set("config-version", 47);

@@ -67,6 +67,38 @@ public class YukimalResourcePacks {
         return YukimalConfig.config.getMapList("resource-pack.packs").size();
     }
 
+    /** 設定に書かれている全パック(API用) */
+    public static List<Pack> loadAll() {
+        List<Pack> all = new ArrayList<>();
+        int index = 0;
+        for (Map<?, ?> raw : YukimalConfig.config.getMapList("resource-pack.packs")) {
+            Object urlObj = raw.get("url");
+            if (urlObj == null) continue;
+            String url = urlObj.toString();
+            Object shaObj = raw.get("sha1");
+            String sha1 = shaObj == null ? "" : shaObj.toString().toLowerCase();
+            Object nameObj = raw.get("name");
+            String name = nameObj == null ? "pack" + index : nameObj.toString();
+            index++;
+            all.add(new Pack(name, UUID.nameUUIDFromBytes(url.getBytes(StandardCharsets.UTF_8)), url, sha1));
+        }
+        return all;
+    }
+
+    public static List<String> appliedNames(UUID playerId) {
+        Map<UUID, String> current = applied.get(playerId);
+        List<String> names = new ArrayList<>();
+        if (current == null) return names;
+        for (Pack pack : loadAll()) {
+            if (current.containsKey(pack.id())) names.add(pack.name());
+        }
+        return names;
+    }
+
+    public static void refresh(ServerPlayer player) {
+        onWorldChange(player);
+    }
+
     private static void apply(ServerPlayer player) {
         if (!"url".equals(YukimalConfig.packMode)) return; // self-host方式は、あとで追加
 
@@ -95,24 +127,13 @@ public class YukimalResourcePacks {
     private static Map<UUID, Pack> wantedFor(ServerPlayer player) {
         Map<String, Pack> byName = new LinkedHashMap<>();
         List<Pack> all = new ArrayList<>();
-        int index = 0;
-        for (Map<?, ?> raw : YukimalConfig.config.getMapList("resource-pack.packs")) {
-            Object urlObj = raw.get("url");
-            if (urlObj == null) continue;
-            String url = urlObj.toString();
-            Object shaObj = raw.get("sha1");
-            String sha1 = shaObj == null ? "" : shaObj.toString().toLowerCase();
-            if (sha1.length() > 40) {
-                Bukkit.getLogger().warning("[YukimalMC] sha1 is too long for pack " + url + " (skipped)");
+        for (Pack pack : loadAll()) {
+            if (pack.sha1().length() > 40) {
+                Bukkit.getLogger().warning("[YukimalMC] sha1 is too long for pack " + pack.url() + " (skipped)");
                 continue;
             }
-            Object nameObj = raw.get("name");
-            String name = nameObj == null ? "pack" + index : nameObj.toString();
-            index++;
-            UUID id = UUID.nameUUIDFromBytes(url.getBytes(StandardCharsets.UTF_8));
-            Pack pack = new Pack(name, id, url, sha1);
             all.add(pack);
-            byName.put(name, pack);
+            byName.put(pack.name(), pack);
         }
 
         Map<UUID, Pack> wanted = new LinkedHashMap<>();

@@ -24,6 +24,14 @@
          ServerLevel serverLevel = player.level();
          player.awardStat(Stats.LEAVE_GAME);
          // CraftBukkit start - Quitting must be before we do final save of data, in case plugins need to modify it
+@@ -690,6 +_,7 @@
+         // It's possible for respawn to be in a diff dimension
+         if (fromLevel != level) {
+             new org.bukkit.event.player.PlayerChangedWorldEvent(serverPlayer.getBukkitEntity(), fromLevel.getWorld()).callEvent();
++            org.purpurmc.purpur.YukimalResourcePacks.onWorldChange(serverPlayer); // YukimalMC - per-world resource packs
+             serverPlayer.triggerDimensionChangeTriggers(level);
+         }
+ 
 @@ -770,6 +_,20 @@
          }
      }
