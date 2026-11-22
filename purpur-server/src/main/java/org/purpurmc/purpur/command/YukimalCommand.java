@@ -44,8 +44,11 @@ public class YukimalCommand extends Command {
         if (args[0].equalsIgnoreCase("version")) {
             sender.sendMessage(Component.text("YukimalMC (" + Bukkit.getName() + " " + Bukkit.getVersion() + ")", NamedTextColor.AQUA));
         } else if (args[0].equalsIgnoreCase("reload")) {
-            YukimalConfig.init();
-            sender.sendMessage(Component.text("yukimal.yml reload complete.", NamedTextColor.GREEN));
+            if (YukimalConfig.init()) {
+                sender.sendMessage(Component.text("yukimal.yml reload complete.", NamedTextColor.GREEN));
+            } else {
+                sender.sendMessage(Component.text("yukimal.yml has errors. Previous settings were kept. See the console.", NamedTextColor.RED));
+            }
         } else if (args[0].equalsIgnoreCase("packs")) {
             File[] packs = YukimalConfig.listPacks();
             sender.sendMessage(Component.text("Resourcepack folder: " + packs.length + " pack(s)", NamedTextColor.AQUA));
