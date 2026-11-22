@@ -11,14 +11,15 @@ import java.util.logging.Level;
 public class YukimalConfig {
     private static final File CONFIG_FILE = new File("yukimal.yml");
     public static final File PACK_DIR = new File("Resourcepack");
-    public static YamlConfiguration config;
+    public static YamlConfiguration config = new YamlConfiguration();
 
     public static String packMode = "url";
     public static boolean packRequired = false;
     public static int selfHostPort = 8765;
     public static String selfHostAddress = "";
 
-    public static void init() {
+    /** @return 読み込みに成功したら true、失敗したら false(失敗時は前の設定のまま) */
+    public static boolean init() {
         YamlConfiguration loaded = new YamlConfiguration();
         try {
             loaded.load(CONFIG_FILE);
@@ -26,7 +27,7 @@ public class YukimalConfig {
             // まだファイルがない場合
         } catch (InvalidConfigurationException ex) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not load yukimal.yml, please correct your syntax errors", ex);
-            return; // 壊れたファイルを上書きしないよう、保存せずに戻る
+            return false; // 前の設定を残し、壊れたファイルは上書きしない
         }
         config = loaded;
         config.options().copyDefaults(true);
@@ -46,6 +47,7 @@ public class YukimalConfig {
         } catch (IOException ex) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not save yukimal.yml", ex);
         }
+        return true;
     }
 
     public static File[] listPacks() {
